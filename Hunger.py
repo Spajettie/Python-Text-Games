@@ -1,293 +1,352 @@
 import random
 import time
 
-####Setup
+food=100
+day=0
+prevbiochoice="forest"
+biochoice=""
+mosq=0
 
-#Class
-
-class Biome():
-    name=""
-    danger=""
-    def description(self):
-        desc_str= "You have discovered the %s. They are %s dangerous." % (self.name, self.danger)
+class Bio():
+    name=['forest','taiga','steppe','desert','praire','jungle','marsh']
+    def desc(self):
+        desc_str="You have discovered the %s." % (self.name)
         return desc_str
 
 class Eat():
-    name=""
-    eatfill=""
-    def description(self):
+    name=['small game','venison','buffalo','beef','chicken','pork','berries']
+    fill=""
+    def desc(self):
         global food
-        desc_str= "You ate some %s. It satiated you by %s points." % (self.name, self.eatfill)
-        food=food+self.eatfill
+        desc_str="You ate some %s. The meal satiated you by %s points." % (self.name, self.fill)
+        food=food+self.fill
         return desc_str
+        return food
 
-#End of Class
-#biomes
-                   
-forest = Biome()
-forest.name="woodlands"
-forest.danger="not very"
+forest=Bio()
+forest.name='forest'
+taiga=Bio()
+taiga.name='taiga'
+steppe=Bio()
+steppe.name='steppe'
+desert=Bio()
+desert.name='desert'
+prairie=Bio()
+prairie.name='prairie'
+jungle=Bio()
+jungle.name='jungle'
+marsh=Bio()
+marsh.name='marsh'
 
-savannah = Biome()
-savannah.name="savannahs"
-savannah.danger="somewhat"
-
-desert = Biome()
-desert.name="deserts"
-desert.danger="very"
-
-mountain = Biome()
-mountain.name="taigas"
-mountain.danger="worringly"
-
-steppe = Biome()
-steppe.name="steppes"
-steppe.danger="somewhat"
-
-marsh = Biome()
-marsh.name="marshes"
-marsh.danger="worringly"
-
-rforest = Biome()
-rforest.name="rainforests"
-rforest.danger="very"
-
-#food choices
-
-game = Eat()
-game.name="small game"
-game.eatfill=10
-
-deer = Eat()
-deer.name="deer"
-deer.eatfill=30
-
-buffalo = Eat()
-buffalo.name="buffalo"
-buffalo.eatfill=65
-
-cow = Eat()
-cow.name="cow"
-cow.eatfill=45
-
-fish = Eat()
-fish.name="fish"
-fish.eatfill=10
-
-goat = Eat()
-goat.name="lamb"
-goat.eatfill=20
-
-camel = Eat()
-camel.name="camel"
-camel.eatfill=30
-
-berry = Eat()
-berry.name="berries"
-berry.eatfill=3
-
-#globals
-
-global food, biomechoice, prevbiomechoice, day
-
-prevbiomechoice=""
-
-mosq=0
-
-food=100
-
-day=0
-
-#Def
-
-def Death():
-    global day
-    print("You have survived " + str(day) + " days! ")
-    time.sleep(5)
-    exit()
-
-def HungerCheck():
-    global food, day
-    if (food > 100):
-        food = 100
-    if (food < 0):
-        food = 0
-    print("You are " + str(food) + "% full.")
-    
-    if((food)<1):
-        print("You have died from hunger.")
-        Death()
+game=Eat()
+game.name='small game'
+game.fill=10
+deer=Eat()
+deer.name='venison'
+deer.fill=25
+bison=Eat()
+bison.name='buffalo'
+bison.fill=50
+beef=Eat()
+beef.name='beef'
+beef.fill=35
+chicken=Eat()
+chicken.name='chicken'
+chicken.fill=15
+pork=Eat()
+pork.name='pork'
+pork.fill=10
+berry=Eat()
+berry.name='berries'
+berry.fill=3
 
 def Spawn():
-    global prevbiomechoice, day
-    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
     print("Being born...")
     time.sleep(1)
-    spawn = forest
-    print(forest.description())
-    prevbiomechoice="forest"
+    print(forest.desc())
+    prevbiochoice="forest"
     day=1
+    return prevbiochoice
+    return day
 
-def MosquitoAtt():
-    global mosq
-    mosq=7
+def HC():
+    global food
+    if(food > 100):
+        food=100
+    if(food < 1):
+        food=0
+    print("You are " + str(food) + "% full.")
 
-def HungerDayTax():
-    global food, mosq, day
+def HDT():
+    global food, day, mosq
     food=food-5
     day=day+1
-    
+
     if(mosq>0):
         food=food-2
         mosq=mosq-1
+        if(mosq<1):
+            print("The mosquitoes have left you.")
 
-def Options():
-    global biomechoice
+    if(food<1):
+        print("You have died from hunger.")
+        Death()
+
+def Death():
+    print("You have survived " + str(day) + " days!")
+    time.sleep(5)
+    exit()
+
+def MosqAtt():
+    global mosq
+    mosq=mosq+7
+
+def ForestHunt():
+    foodchance=random.randint(1,100)
+    if(foodchance<=35):
+        print("You found nothing to eat.")
+        
+    elif(36<=foodchance<=75):
+        print(game.desc())
+        
+    elif(76<=foodchance<=100):
+        deathchance=random.randint(1,100)
+        
+        if(deathchance<=15):
+            print("You died from an accident with an aggressive buck.")
+            Death()
+            
+        else:
+            print(deer.desc())
+
+def TaigaHunt():
+    foodchance=random.randint(1,100)
+    if(foodchance<=55):
+        print("You found nothing to eat.")
+        
+    elif(56<=foodchance<=80):
+        print(game.desc())
+        
+    elif(81<=foodchance<=90):
+        deathchance=random.randint(1,100)
+        
+        if(deathchance<=15):
+            print("You died from an accident with an aggressive buck.")
+            Death()
+        else:
+            print(deer.desc())
+            
+    elif(91<=foodchance<=100):
+        deathchance=random.randint(1,100)
+        
+        if(deathchance<=25):
+            print("You died from an accident with an aggressive buffalo.")
+            Death()
+            
+        else:
+            print(bison.desc())
+
+def SteppeHunt():
+    foodchance=random.randint(1,100)
+    if(foodchance<=35):
+        print("You found nothing to eat.")
+        
+    elif(36<=foodchance<=55):
+        print(game.desc())
+        
+    elif(56<=foodchance<=65):
+        deathchance=random.randint(1,100)
+        
+        if(deathchance<=10):
+            print("You died from an accident with an aggressive bull.")
+            Death()
+            
+        else:
+            print(beef.desc())
+
+    elif(66<=foodchance<=75):
+        print(pork.desc())
+
+    elif(76<=foodchance<=90):
+        print(chicken.desc())
+            
+    elif(91<=foodchance<=100):
+        deathchance=random.randint(1,100)
+        
+        if(deathchance<=25):
+            print("You died from an accident with an aggressive buffalo.")
+            Death()
+            
+        else:
+            print(bison.desc())
+
+def DesertHunt():
+    foodchance=random.randint(1,100)
+    if(foodchance<=65):
+        print("You found nothing to eat.")
+        
+    elif(66<=foodchance<=100):
+        print(game.desc())
+
+def MarshHunt():
+    foodchance=random.randint(1,100)
+    if(foodchance<=45):
+        print("You found nothing to eat.")
+        
+    elif(46<=foodchance<=100):
+        print(game.desc())
+        
+    mosqchance=random.randint(1,100)
+    if(mosqchance<=65):
+        print("You have been swarmed by mosquitoes!")
+        MosqAtt()
+        
+def JungleHunt():
+    foodchance=random.randint(1,100)
+    if(foodchance<=30):
+        print("You found nothing to eat.")
+        
+    elif(31<=foodchance<=70):
+        print(game.desc())
+
+    elif(71<=foodchance<=100):
+        print(chicken.desc())
+        
+    mosqchance=random.randint(1,100)
+    if(mosqchance<=10):
+        print("You have been swarmed by mosquitoes!")
+        MosqAtt()
+
+def PrairieHunt():
+    foodchance=random.randint(1,100)
+    if(foodchance<=50):
+        print("You found nothing to eat.")
+        
+    elif(51<=foodchance<=65):
+        print(game.desc())
+
+    elif(66<=foodchance<=80):
+        print(pork.desc())
+
+    elif(81<=foodchance<=100):
+        deathchance=random.randint(1,100)
+        
+        if(deathchance<=10):
+            print("You died from an accident with an aggressive bull.")
+            Death()
+            
+        else:
+            print(beef.desc())
+        
+    mosqchance=random.randint(1,100)
+    if(mosqchance<=10):
+        print("You have been swarmed by mosquitoes!")
+        MosqAtt()
+
+def Hunt():
+    global biochoice
+    print("Hunting...")
+    time.sleep(1)
+    print("You spent the day hunting in the "+ (biochoice) +".")
+    if(biochoice=="forest"):
+        ForestHunt()
+    elif(biochoice=="taiga"):
+        TaigaHunt()
+    elif(biochoice=="steppe"):
+        SteppeHunt()
+    elif(biochoice=="desert"):
+        DesertHunt()
+    elif(biochoice=="prairie"):
+        PrairieHunt()
+    elif(biochoice=="jungle"):
+        JungleHunt()
+    elif(biochoice=="marsh"):
+        MarshHunt()
+
+def Loc():
+    global prevbiochoice, biochoice
+    print("Forest, Taiga, Steppe, Desert, Prairie, Jungle, and Marsh")
+    biochoice=input("Where would you like to go? (type in lowercase letters): ")
+    if(biochoice==prevbiochoice):
+        print("You are already there.")
+        Loc()
+
+    elif(biochoice!=prevbiochoice):
+        if(biochoice=="forest"):
+            print(forest.desc())
+            biochoice="forest"
+            prevbiochoice="forest"
+            HDT()
+            HDT()
+            HC()
+
+        elif(biochoice=="taiga"):
+            print(taiga.desc())
+            biochoice="taiga"
+            prevbiochoice="taiga"
+            HDT()
+            HDT()
+            HC()
+
+        elif(biochoice=="steppe"):
+            print(steppe.desc())
+            biochoice="steppe"
+            prevbiochoice="steppe"
+            HDT()
+            HDT()
+            HC()
+
+        elif(biochoice=="desert"):
+            print(desert.desc())
+            biochoice="desert"
+            prevbiochoice="desert"
+            HDT()
+            HDT()
+            HC()
+
+        elif(biochoice=="prairie"):
+            print(prairie.desc())
+            biochoice="prairie"
+            prevbiochoice="prairie"
+            HDT()
+            HDT()
+            HC()
+
+        elif(biochoice=="jungle"):
+            print(jungle.desc())
+            biochoice="jungle"
+            prevbiochoice="jungle"
+            HDT()
+            HDT()
+            HC()
+
+        elif(biochoice=="marsh"):
+            print(marsh.desc())
+            biochoice="marsh"
+            prevbiochoice="marsh"
+            HDT()
+            HDT()
+            HC()
+
+        elif(biochoice=="n"):
+            print("You have decided to stay where you are.")
+
+        else:
+            print("Invalid choice.")
+            Loc()
+
+    else:
+        print("Invalid choice.")
+        Loc()
+    biochoice=prevbiochoice
+
+    return prevbiochoice, biochoice
+
+def Option():
     huntchoice=input("Would you like to hunt? Y/N: ")
     if(huntchoice=="Y"):
-        print("Hunting...")
-        
-        if(biomechoice=="steppe"):
-            print("You spent the whole day hunting in the steppes.")
-            foodchoice=random.randint(1,100)
-            
-            if(foodchoice <= 5):
-                deathchance=random.randint(1,100)
-                if(deathchance <=20):
-                    print("You have died from a bad accident with an aggressive buffalo.")
-                    Death()
+        Hunt()
 
-                else:   
-                    print(buffalo.description())
-                
-            elif(6 <= foodchoice <= 10):
-                deathchance=random.randint(1,100)
-                if(deathchance <=15):
-                    print("You have died from a bad accident with an aggressive bull.")
-                    Death()
-
-                else:   
-                    print(cow.description())
-                
-            elif(11<= foodchoice <= 20):
-                deathchance=random.randint(1,100)
-                if(deathchance <=5):
-                    print("You have died from a bad accident with an aggressive ram.")
-                    Death()
-
-                else:   
-                    print(goat.description())
-                
-            elif(21 <= foodchoice <= 35):
-                print(game.description())
-                
-            else:
-                print("You found nothing to eat.")
-
-        if(biomechoice=="forest"):
-            print("You spent the whole day hunting in the woodlands.")
-            foodchoice=random.randint(1,100)
-            
-            if(foodchoice <= 20):
-                deathchance=random.randint(1,100)
-                if(deathchance <=10):
-                    print("You have died from a bad accident with an aggressive buck.")
-                    Death()
-
-                else:   
-                    print(deer.description())
-                
-            elif(21 <= foodchoice <= 50):
-                print(game.description())
-                
-            else:
-                print("You found nothing to eat.")
-
-        if(biomechoice=="desert"):
-            print("You spent the whole day hunting in the deserts.")
-            foodchoice=random.randint(1,100)
-            
-            if(foodchoice <= 20):
-                deathchance=random.randint(1,100)
-                if(deathchance <=10):
-                    print("You have died from a bad accident with an aggressive camel.")
-                    Death()
-
-                else:   
-                    print(camel.description())
-                
-            else:
-                print("You found nothing to eat.")
-
-        if(biomechoice=="savannah"):
-            print("You spent the whole day hunting in the savannahs.")
-            foodchoice=random.randint(1,100)
-            
-            if(foodchoice <= 20):
-                deathchance=random.randint(1,100)
-                if(deathchance <=20):
-                    print("You have died from a bad accident with an aggressive buffalo.")
-                    Death()
-
-                else:   
-                    print(buffalo.description())
-                
-            elif(21 <= foodchoice <= 40):
-                print(game.description())
-                
-            else:
-                print("You found nothing to eat.")
-
-        if(biomechoice=="taiga"):
-            print("You spent the whole day hunting in the taigas.")
-            foodchoice=random.randint(1,100)
-            
-            if(foodchoice <= 20):
-                deathchance=random.randint(1,100)
-                if(deathchance <=5):
-                    print("You have died from a bad accident with an aggressive ram.")
-                    Death()
-
-                else:   
-                    print(goat.description())
-
-            elif(21 <= foodchoice <= 30):
-                print(game.description())
-
-            else:
-                print("You found nothing to eat.")
-
-        if(biomechoice=="marsh"):
-            print("You spent the whole day hunting in the marshes.")
-            foodchoice=random.randint(1,100)
-            
-            if(foodchoice <= 30):
-                print(fish.description())
-
-            elif(31 <= foodchoice <= 45):
-                print(game.description())
-
-            else:
-                print("You found nothing to eat.")
-
-            mosquitochoice=random.randint(1,100)
-            if(mosquitochoice <=60):
-                print("You have been bitten by mosquitoes!")
-                MosquitoAtt()
-
-        if(biomechoice=="rforest"):
-            print("You spent the whole day hunting in the rainforests.")
-            foodchoice=random.randint(1,100)
-            
-            if(foodchoice <= 20):
-                print(fish.description())
-
-            elif(21 <= foodchoice <= 35):
-                print(game.description())
-
-            else:
-                print("You found nothing to eat.")
-                
     elif(huntchoice=="N"):
         print("You have decided not to hunt for today.")
 
@@ -295,114 +354,39 @@ def Options():
         if(huntchoice=="Y"):
             print("You spent the whole day looking for some berries.")
             foodchoice=random.randint(1,100)
-            
-            if(foodchoice <= 50):
+
+            if(foodchoice<=50):
                 deathchance=random.randint(1,100)
-                if(deathchance <=2):
-                    print("You have died from eating a bad berry.")
+                if(deathchance<=1):
+                    print("You have died from eating a poisonous berry.")
                     Death()
 
-                else:   
-                    print(berry.description())
+                if(2<=foodchoice<=4):
+                    print("You ate a bad berry!")
+                    food=food-2
+                else:
+                    print(berry.desc())
             else:
                 print("You found nothing to eat.")
-
         elif(huntchoice=="N"):
-            print("You have decided not to hunt for today.")
+            print("You have decided not to eat for today.")
 
         else:
             print("Invalid choice.")
-            Options()
+            Option()
 
     else:
         print("Invalid choice.")
-        Options()
-        
-    HungerDayTax()
-    HungerCheck()
-    LocationC()
-    Options()
+        Option()
 
-def LocationC():
-    global prevbiomechoice, biomechoice
-    biomechoice=input("Where would you like to go? (Forest, Savannah, Desert, Taiga, Steppe, Marsh, Rainforest, N) ")
-    if(biomechoice==prevbiomechoice):
-        print("You are already there.")
-        LocationC()
-        
-    elif(biomechoice=="forest"):
-        print(forest.description())
-        biomechoice="forest"
-        prevbiomechoice="forest"
-        HungerDayTax()
-        HungerDayTax()
-        HungerCheck()
-        
-    elif(biomechoice=="savannah"):
-        print(savannah.description())
-        prevbiomechoice="savannah"
-        HungerDayTax()
-        HungerDayTax()
-        HungerCheck()
-        
-    elif(biomechoice=="desert"):
-        print(desert.description())
-        biomechoice="desert"
-        prevbiomechoice="desert"
-        HungerDayTax()
-        HungerDayTax()
-        HungerCheck()
-        
-    elif(biomechoice=="taiga"):
-        print(mountain.description())
-        biomechoice="taiga"
-        prevbiomechoice="taiga"
-        HungerDayTax()
-        HungerDayTax()
-        HungerCheck()
-
-    elif(biomechoice=="steppe"):
-        print(steppe.description())
-        biomechoice="steppe"
-        prevbiomechoice="steppe"
-        HungerDayTax()
-        HungerDayTax()
-        HungerCheck()
-        
-    elif(biomechoice=="marsh"):
-        print(marsh.description())
-        biomechoice="marsh"
-        prevbiomechoice="marsh"
-        HungerDayTax()
-        HungerDayTax()
-        HungerCheck()
-        
-    elif(biomechoice=="rforest"):
-        print(rforest.description())
-        biomechoice="rforest"
-        prevbiomechoice="rforest"
-        HungerDayTax()
-        HungerDayTax()
-        HungerCheck()
-        
-    elif(biomechoice=="N"):
-        biomechoice=prevbiomechoice
-        print("You have decided to stay where you are.")
-
-    else:
-        print("Invalid choice.")
-        LocationC()
-
-#End of Def
-####End of Setup
-#Start Game
+    HDT()
+    HC()
+    Loc()
+    Option()
 
 Spawn()
-
-HungerCheck()
-
-LocationC()
-
-Options()
-
-
+HC()
+Loc()
+Option()
+        
+            
