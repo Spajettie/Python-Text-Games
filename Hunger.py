@@ -6,6 +6,20 @@ day=0
 prevbiochoice="forest"
 biochoice=""
 mosq=0
+foresthc=0
+forestfa=0
+taigahc=0
+taigafa=0
+steppehc=0
+steppefa=0
+deserthc=0
+desertfa=0
+prairiehc=0
+prairiefa=0
+junglehc=0
+junglefa=0
+marshhc=0
+marshfa=0
 
 class Bio():
     name=['forest','taiga','steppe','desert','praire','jungle','marsh']
@@ -78,7 +92,7 @@ def HC():
     print("You are " + str(food) + "% full.")
 
 def HDT():
-    global food, day, mosq
+    global food, day, mosq, forestfa, taigafa, steppefa, desertfa, marshfa, junglefa, prairiefa
     food=food-5
     day=day+1
 
@@ -87,7 +101,21 @@ def HDT():
         mosq=mosq-1
         if(mosq<1):
             print("The mosquitoes have left you.")
-
+    if(forestfa>0):
+        forestfa=forestfa-1
+    if(taigafa>0):
+        taigafa=taigafa-1
+    if(steppefa>0):
+        steppefa=steppefa-1
+    if(desertfa>0):
+        desertfa=desertfa-1
+    if(marshfa>0):
+        marshfa=marshfa-1
+    if(junglefa>0):
+        junglefa=junglefa-1
+    if(prairiefa>0):
+        prairiefa=prairiefa-1
+        
     if(food<1):
         print("You have died from hunger.")
         Death()
@@ -102,6 +130,14 @@ def MosqAtt():
     mosq=mosq+7
 
 def ForestHunt():
+    global foresthc, forestfa
+    if(foresthc>4):
+        forestfa=15
+        foresthc=0
+    if(forestfa>0):
+        print("You drained the land of its resources.")
+        return
+
     foodchance=random.randint(1,100)
     if(foodchance<=35):
         print("You found nothing to eat.")
@@ -119,7 +155,18 @@ def ForestHunt():
         else:
             print(deer.desc())
 
+    foresthc=foresthc+1
+        
+
 def TaigaHunt():
+    global taigahc, taigafa
+    if(taigahc>4):
+        taigafa=15
+        taigahc=0
+    if(taigafa>0):
+        print("You drained the land of its resources.")
+        return
+    
     foodchance=random.randint(1,100)
     if(foodchance<=55):
         print("You found nothing to eat.")
@@ -146,7 +193,17 @@ def TaigaHunt():
         else:
             print(bison.desc())
 
+    taigahc=taigahc+1
+
 def SteppeHunt():
+    global steppehc, steppefa
+    if(steppehc>4):
+        steppefa=15
+        steppehc=0
+    if(steppefa>0):
+        print("You drained the land of its resources.")
+        return
+    
     foodchance=random.randint(1,100)
     if(foodchance<=35):
         print("You found nothing to eat.")
@@ -180,7 +237,17 @@ def SteppeHunt():
         else:
             print(bison.desc())
 
+    steppehc=steppehc+1
+
 def DesertHunt():
+    global deserthc, desertfa
+    if(deserthc>4):
+        desertfa=15
+        deserthc=0
+    if(desertfa>0):
+        print("You drained the land of its resources.")
+        return
+    
     foodchance=random.randint(1,100)
     if(foodchance<=65):
         print("You found nothing to eat.")
@@ -188,7 +255,17 @@ def DesertHunt():
     elif(66<=foodchance<=100):
         print(game.desc())
 
+    deserthc=deserthc+1
+
 def MarshHunt():
+    global marshhc, marshfa
+    if(marshhc>4):
+        marshfa=15
+        marshhc=0
+    if(marshfa>0):
+        print("You drained the land of its resources.")
+        return
+    
     foodchance=random.randint(1,100)
     if(foodchance<=45):
         print("You found nothing to eat.")
@@ -200,8 +277,18 @@ def MarshHunt():
     if(mosqchance<=65):
         print("You have been swarmed by mosquitoes!")
         MosqAtt()
+
+    marshhc=marshhc+1
         
 def JungleHunt():
+    global junglehc, junglefa
+    if(junglehc>4):
+        junglefa=15
+        junglehc=0
+    if(junglefa>0):
+        print("You drained the land of its resources.")
+        return
+        
     foodchance=random.randint(1,100)
     if(foodchance<=30):
         print("You found nothing to eat.")
@@ -217,7 +304,16 @@ def JungleHunt():
         print("You have been swarmed by mosquitoes!")
         MosqAtt()
 
+    junglehc=junglehc+1
+
 def PrairieHunt():
+    global prairiehc, prairiefa
+    if(prairiehc>4):
+        prairiefa=15
+        prairiehc=0
+    if(prairiefa>0):
+        print("You drained the land of its resources.")
+        return
     foodchance=random.randint(1,100)
     if(foodchance<=50):
         print("You found nothing to eat.")
@@ -237,11 +333,8 @@ def PrairieHunt():
             
         else:
             print(beef.desc())
-        
-    mosqchance=random.randint(1,100)
-    if(mosqchance<=10):
-        print("You have been swarmed by mosquitoes!")
-        MosqAtt()
+
+    prairiehc=prairiehc+1
 
 def Hunt():
     global biochoice
@@ -388,5 +481,3 @@ Spawn()
 HC()
 Loc()
 Option()
-        
-            
