@@ -21,6 +21,14 @@ junglefa=0
 marshhc=0
 marshfa=0
 
+teforest=0
+tetaiga=0
+testeppe=0
+tedesert=0
+teprairie=0
+tejungle=0
+temarsh=0
+
 class Bio():
     name=['forest','taiga','steppe','desert','praire','jungle','marsh']
     def desc(self):
@@ -75,6 +83,7 @@ berry.name='berries'
 berry.fill=3
 
 def Spawn():
+    global day
     print("Being born...")
     time.sleep(1)
     print(forest.desc())
@@ -337,23 +346,86 @@ def PrairieHunt():
     prairiehc=prairiehc+1
 
 def Hunt():
-    global biochoice
+    global biochoice, teforest, tetaiga, testeppe, teprairie, tejungle, temarsh, food
     print("Hunting...")
     time.sleep(1)
     print("You spent the day hunting in the "+ (biochoice) +".")
     if(biochoice=="forest"):
+        teforest=random.randint(1,100)
+        if(teforest<=5):
+            print("You got attacked by a pack of wolves and died.")
+            Death()
+            return
+        if(5<teforest<=20):
+            print("You found the morsel of a small hare. It was somewhat gnawed on.")
+            food=food+6
+
         ForestHunt()
     elif(biochoice=="taiga"):
+        tetaiga=random.randint(1,100)
+        if(tetaiga<=7):
+            print("During your hunt you collapsed of hypothermia.")
+            Death()
+            return
+        if(7<tetaiga<=23):
+            print("You came across a frozen deer. The cold must have gotten to it.")
+            food=food+12
+
         TaigaHunt()
     elif(biochoice=="steppe"):
+        testeppe=random.randint(1,100)
+        if(testeppe<=4):
+            print("You were killed by a buffalo stampede.")
+            Death()
+            return
+        if(4<testeppe<=10):
+            print("You found a dying buffalo. Easy target.")
+            food=food+32
+        
         SteppeHunt()
     elif(biochoice=="desert"):
+        tedesert=random.randint(1,100)
+        if(tedesert<=7):
+            print("During your search for food you collapsed due to heatstroke.")
+            Death()
+            return
+        if(7<tedesert<=16):
+            print("You found an oasis and quenched yourself.")
+            food=food+8
+        
         DesertHunt()
     elif(biochoice=="prairie"):
+        teprairie=random.randint(1,100)
+        if(teprairie<=4):
+            print("A rogue lion got the jump on you.")
+            Death()
+            return
+        if(4<teprairie<=10):
+            print("You found a lone antelope. Somehow, you caught it.")
+            food=food+13
+    
         PrairieHunt()
     elif(biochoice=="jungle"):
+        tejungle=random.randint(1,100)
+        if(tejungle<=3):
+            print("A wolf spider bit you. You suffered a slow, painful death.")
+            Death()
+            return
+        if(3<tejungle<=12):
+            print("You ate some exotic fruits on your hunt.")
+            food=food+8
+    
         JungleHunt()
     elif(biochoice=="marsh"):
+        temarsh=random.randint(1,100)
+        if(temarsh<=2):
+            print("You drowned crossing a dangerous pathway in the marsh.")
+            Death()
+            return
+        if(2<temarsh<=10):
+            print("You managed to catch some fish while on your hunt.")
+            food=food+6
+        
         MarshHunt()
 
 def Loc():
